@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsString, IsNotEmpty, Length } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  Length,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class CreatePostDto {
+  @IsOptional()
+  @IsNumber()
+  id?: number;
+
   @IsString()
   @IsNotEmpty()
   @Length(3, 100)

@@ -4,23 +4,40 @@ import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
+  private readonly posts: CreatePostDto[] = [];
+
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    this.posts.push(createPostDto);
+    return createPostDto;
   }
 
   findAll() {
-    return `This action returns all posts`;
+    return this.posts;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} post`;
+    const post = this.posts[id];
+    if (!post) {
+      throw new Error(`Post with ID ${id} not found`);
+    }
+    return post;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    const postIndex = this.posts.findIndex((post) => post.id === id);
+    if (postIndex === -1) {
+      throw new Error(`Post with ID ${id} not found`);
+    }
+    this.posts[postIndex] = { ...this.posts[postIndex], ...updatePostDto };
+    return this.posts[postIndex];
   }
 
   remove(id: number) {
+    const postIndex = this.posts.findIndex((post) => post.id === id);
+    if (postIndex === -1) {
+      throw new Error(`Post with ID ${id} not found`);
+    }
+    this.posts.splice(postIndex, 1);
     return `This action removes a #${id} post`;
   }
 }
